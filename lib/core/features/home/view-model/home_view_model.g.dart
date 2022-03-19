@@ -90,8 +90,8 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
       AsyncAction('_HomeViewModelBase.getHomepage');
 
   @override
-  Future<List<dynamic>> getHomepage() {
-    return _$getHomepageAsyncAction.run(() => super.getHomepage());
+  Future<List<dynamic>> getHomepage(int refresh) {
+    return _$getHomepageAsyncAction.run(() => super.getHomepage(refresh));
   }
 
   final _$_HomeViewModelBaseActionController =

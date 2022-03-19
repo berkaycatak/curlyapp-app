@@ -35,7 +35,7 @@ class SinglePostView extends StatelessWidget {
           children: [
             Image.network(singleData.thumbnailFull ?? ""),
             Text(singleData.title ?? ""),
-            Html(
+            SelectableHtml(
               data: singleData.content ?? "",
             ),
           ],

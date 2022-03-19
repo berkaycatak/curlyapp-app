@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as baglanti;
+import 'package:curlyapp/core/constants/constants.dart';
+import 'package:http/http.dart' as connection;
 import 'package:curlyapp/core/features/home/model/home.dart';
 import 'package:mobx/mobx.dart';
-import 'package:dio/dio.dart';
 part 'home_view_model.g.dart';
 
 class HomeViewModel = _HomeViewModelBase with _$HomeViewModel;
@@ -17,8 +16,7 @@ abstract class _HomeViewModelBase with Store {
   List<Home> hikayeData = [];
   @observable
   List<Home> hikayeAltData = [];
-  final url = "https://kisavoz.com/wp-json/curlyapp/v1/posts";
-  var url2 = Uri.parse('https://kisavoz.com/wp-json/curlyapp/v1/posts');
+  var url = Uri.parse(WEBSITE_URL + '/wp-json/curlyapp/v1/posts');
 
   @observable
   bool isServiceRequestLoading = false;
@@ -33,11 +31,14 @@ abstract class _HomeViewModelBase with Store {
   }
 
   @action
-  Future<List> getHomepage() async {
-    print(mansetData);
+  Future<List> getHomepage(int refresh) async {
     changeRequest();
 
-    final cevap = await baglanti.get(url2);
+    if (refresh == 1) {
+      hikayeAltData = [];
+    }
+
+    final cevap = await connection.get(url);
     if (cevap.statusCode == 200) {
       try {
         // manset

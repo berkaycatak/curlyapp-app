@@ -19,7 +19,7 @@ class _SplashViewState extends State<SplashView> {
     // TODO: implement initState
     super.initState();
 
-    _viewModel.getHomepage().then((value) {
+    _viewModel.getHomepage(0).then((value) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
