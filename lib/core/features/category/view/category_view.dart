@@ -3,8 +3,13 @@ import 'package:curlyapp/core/features/category/view-model/category_view_model.d
 import 'package:curlyapp/core/features/home/model/home.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
 import 'package:curlyapp/core/features/single-post/view/single_post_view.dart';
+import 'package:curlyapp/core/widgets/animated_list_item.dart';
+import 'package:curlyapp/core/widgets/list_article_widget.dart';
+import 'package:curlyapp/core/widgets/loading/category_loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CategoryView extends StatefulWidget {
   final int categoryId;
@@ -25,16 +30,13 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   void initState() {
     super.initState();
-
-    print(widget._categoryViewModel.isServiceRequestLoading.toString());
-    print(widget.categoryId);
-
     widget._categoryViewModel.getData(widget.categoryId, 0);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
         title: SizedBox(
@@ -47,73 +49,75 @@ class _CategoryViewState extends State<CategoryView> {
                 "https://kisavoz.com/wp-content/uploads/2018/06/Ba%C5%9Fl%C4%B1ks%C4%B1z-1-3-1.jpg",
           ),
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Color.fromARGB(255, 204, 75, 0),
-                  Color.fromARGB(255, 253, 30, 168),
-                ]),
-          ),
-        ),
+        backgroundColor: Colors.transparent,
       ),
       body: Observer(builder: (_) {
         return widget._categoryViewModel.isServiceRequestLoading
-            ? SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      child: Image.asset(
-                        "assets/images/single.gif",
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 10),
-                    ),
-                    Container(
-                      child: Image.asset(
-                        "assets/images/single.gif",
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 0, bottom: 10),
-                    ),
-                    Container(
-                      child: Image.asset(
-                        "assets/images/single.gif",
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 0, bottom: 10),
-                    ),
-                    Container(
-                      child: Image.asset(
-                        "assets/images/single.gif",
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 0, bottom: 10),
-                    ),
-                  ],
-                ),
-              )
+            ? const CategoryLoadingWidget()
             : RefreshIndicator(
                 onRefresh: () =>
                     widget._categoryViewModel.getData(widget.categoryId, 1),
-                child: ListView.builder(
+                child: ListView.separated(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: widget._categoryViewModel.data.length + 1,
                   itemBuilder: (BuildContext context, int index) {
-                    return widget._categoryViewModel.data.length == index
-                        ? GestureDetector(
-                            onTap: (() => widget._categoryViewModel
-                                .changePage(widget.categoryId)),
-                            child: Text("devamı"),
-                          )
-                        : AnimatedListItem(
-                            index,
-                            key: ValueKey<int>(index),
-                            data: widget._categoryViewModel.data[index],
-                          );
+                    if (widget._categoryViewModel.data.length == index) {
+                      return GestureDetector(
+                        onTap: (() => widget._categoryViewModel
+                            .changePage(widget.categoryId)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.lightBlueAccent,
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Devamını yükle...",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (index == 0) {
+                      return AnimatedListItem(
+                        index,
+                        key: ValueKey<int>(index),
+                        widget: CategoryFirstItemWidget(
+                          image: widget
+                              ._categoryViewModel.data[index].thumbnailFull,
+                          title: widget._categoryViewModel.data[index].title,
+                          date: widget._categoryViewModel.data[index].date,
+                          categoryName:
+                              widget._categoryViewModel.data[index].catName,
+                          content: widget._categoryViewModel.data[index].icerik,
+                        ),
+                      );
+                    } else {
+                      return AnimatedListItem(
+                        index,
+                        key: ValueKey<int>(index),
+                        widget: ListArticleWidget(
+                          title: widget._categoryViewModel.data[index].title,
+                          image: widget
+                              ._categoryViewModel.data[index].thumbnailFull,
+                          time: widget._categoryViewModel.data[index].date,
+                          editor:
+                              widget._categoryViewModel.data[index].authorName,
+                        ),
+                      );
+                    }
                   },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(),
                 ),
               );
       }),
@@ -121,71 +125,118 @@ class _CategoryViewState extends State<CategoryView> {
   }
 }
 
-class AnimatedListItem extends StatefulWidget {
-  final int index;
-  final Category data;
-  AnimatedListItem(this.index, {Key? key, required this.data})
+class CategoryFirstItemWidget extends StatelessWidget {
+  final image, title, categoryName, date, content;
+  const CategoryFirstItemWidget(
+      {Key? key,
+      this.image,
+      this.title,
+      this.categoryName,
+      this.date,
+      this.content})
       : super(key: key);
 
   @override
-  _AnimatedListItemState createState() => _AnimatedListItemState();
-}
-
-class _AnimatedListItemState extends State<AnimatedListItem> {
-  bool _animate = false;
-
-  static bool _isStart = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _isStart
-        ? Future.delayed(Duration(milliseconds: widget.index * 100), () {
-            setState(() {
-              _animate = true;
-              _isStart = false;
-            });
-          })
-        : _animate = true;
-  }
-
-  @override
-  void dispose() {
-    _isStart = true;
-    _animate = false;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 500),
-      opacity: _animate ? 1 : 0,
-      curve: Curves.easeIn,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                child: Image.network(widget.data.thumbnailFull ?? ""),
+    return Container(
+      height: 350,
+      child: Stack(
+        children: [
+          Image.network(
+            image,
+            height: 350,
+            fit: BoxFit.cover,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: FractionalOffset.topCenter,
+                end: FractionalOffset.bottomCenter,
+                colors: [
+                  Color.fromARGB(0, 0, 0, 0),
+                  Color.fromARGB(199, 0, 0, 0)
+                ],
+                stops: [0, 0.6],
               ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    widget.data.title.toString(),
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                      fontSize: 20,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            height: 350,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color.fromARGB(255, 250, 18, 2),
+                      ),
+                      child: Text(
+                        categoryName,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
+                    Text(
+                      date,
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15),
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.clip,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
+                child: Html(
+                  data: content + "...",
+                  style: {
+                    "body": Style(
+                      color: Color.fromARGB(255, 190, 190, 190),
+                      padding: EdgeInsets.zero,
+                      maxLines: 3,
+                      textDecorationThickness: 0,
+                      fontSize: FontSize.rem(1),
+                    ),
+                  },
                 ),
               ),
             ],
           ),
-        ),
+        ],
       ),
+    );
+  }
+}
+
+class CategoryItemWidget extends StatelessWidget {
+  const CategoryItemWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text("diğer"),
     );
   }
 }

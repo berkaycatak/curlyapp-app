@@ -35,7 +35,9 @@ abstract class _HomeViewModelBase with Store {
     changeRequest();
 
     if (refresh == 1) {
-      hikayeAltData = [];
+      mansetData = [];
+      mansetAltData = [];
+      hikayeData = [];
     }
 
     final cevap = await connection.get(url);

@@ -24,8 +24,8 @@ class SinglePostView extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.bottomCenter,
                 colors: <Color>[
-                  Color.fromARGB(255, 105, 39, 143),
-                  Color.fromARGB(255, 243, 33, 61),
+                  Color.fromARGB(255, 54, 10, 16),
+                  Color.fromARGB(255, 71, 27, 33),
                 ]),
           ),
         ),
