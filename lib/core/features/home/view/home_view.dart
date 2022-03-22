@@ -1,5 +1,6 @@
 import 'package:curlyapp/core/features/category/view/category_view.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
+import 'package:curlyapp/core/features/single-post/view/single_post_view.dart';
 import 'package:curlyapp/core/widgets/animated_list_item.dart';
 import 'package:curlyapp/core/widgets/categories_widget.dart';
 import 'package:curlyapp/core/widgets/home_manset_widget.dart';
@@ -66,14 +67,25 @@ class HomeView extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemCount: 1,
                             itemBuilder: (BuildContext context, int index) {
-                              return AnimatedListItem(
-                                index,
-                                key: ValueKey<int>(index),
-                                widget: HomeMansetWidget(
-                                  fullSize: true,
-                                  imageUrl:
-                                      viewModel.mansetData[index].thumbnailFull,
-                                  title: viewModel.mansetData[index].title,
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePostView(
+                                      home_singleData:
+                                          viewModel.mansetData[index],
+                                    ),
+                                  ),
+                                ),
+                                child: AnimatedListItem(
+                                  index,
+                                  key: ValueKey<int>(index),
+                                  widget: HomeMansetWidget(
+                                    fullSize: true,
+                                    imageUrl: viewModel
+                                        .mansetData[index].thumbnailFull,
+                                    title: viewModel.mansetData[index].title,
+                                  ),
                                 ),
                               );
                             },
@@ -91,14 +103,25 @@ class HomeView extends StatelessWidget {
                                 index = 1;
                               else
                                 index++;
-                              return AnimatedListItem(
-                                index,
-                                key: ValueKey<int>(index),
-                                widget: HomeMansetWidget(
-                                  fullSize: false,
-                                  imageUrl:
-                                      viewModel.mansetData[index].thumbnailFull,
-                                  title: viewModel.mansetData[index].title,
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePostView(
+                                      home_singleData:
+                                          viewModel.mansetData[index],
+                                    ),
+                                  ),
+                                ),
+                                child: AnimatedListItem(
+                                  index,
+                                  key: ValueKey<int>(index),
+                                  widget: HomeMansetWidget(
+                                    fullSize: false,
+                                    imageUrl: viewModel
+                                        .mansetData[index].thumbnailFull,
+                                    title: viewModel.mansetData[index].title,
+                                  ),
                                 ),
                               );
                             },
@@ -142,21 +165,33 @@ class HomeView extends StatelessWidget {
                         ),
 
                         SizedBox(
-                          height: viewModel.hikayeData.length * 120,
+                          height: viewModel.hikayeData.length * 125,
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: viewModel.mansetAltData.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return AnimatedListItem(index,
-                                  key: ValueKey<int>(index),
-                                  widget: ListArticleWidget(
-                                    title: viewModel.mansetAltData[index].title,
-                                    image: viewModel
-                                        .mansetAltData[index].thumbnailFull,
-                                    time: viewModel.mansetAltData[index].date,
-                                    editor: viewModel
-                                        .mansetAltData[index].authorName,
-                                  ));
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePostView(
+                                      home_singleData:
+                                          viewModel.mansetAltData[index],
+                                    ),
+                                  ),
+                                ),
+                                child: AnimatedListItem(index,
+                                    key: ValueKey<int>(index),
+                                    widget: ListArticleWidget(
+                                      title:
+                                          viewModel.mansetAltData[index].title,
+                                      image: viewModel
+                                          .mansetAltData[index].thumbnailFull,
+                                      time: viewModel.mansetAltData[index].date,
+                                      editor: viewModel
+                                          .mansetAltData[index].authorName,
+                                    )),
+                              );
                             },
                           ),
                         ),
@@ -200,14 +235,25 @@ class HomeView extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               itemCount: viewModel.hikayeData.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return AnimatedListItem(
-                                  index,
-                                  key: ValueKey<int>(index),
-                                  widget: LastArticleStoryWidget(
-                                    title: viewModel.hikayeData[index].title,
-                                    image: viewModel
-                                        .hikayeData[index].thumbnailFull,
-                                    date: viewModel.hikayeData[index].date,
+                                return GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SinglePostView(
+                                        home_singleData:
+                                            viewModel.hikayeData[index],
+                                      ),
+                                    ),
+                                  ),
+                                  child: AnimatedListItem(
+                                    index,
+                                    key: ValueKey<int>(index),
+                                    widget: LastArticleStoryWidget(
+                                      title: viewModel.hikayeData[index].title,
+                                      image: viewModel
+                                          .hikayeData[index].thumbnailFull,
+                                      date: viewModel.hikayeData[index].date,
+                                    ),
                                   ),
                                 );
                               },
@@ -252,21 +298,32 @@ class HomeView extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: viewModel.hikayeAltData.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return AnimatedListItem(
-                                index,
-                                key: ValueKey<int>(index),
-                                widget: Container(
-                                  height: 100,
-                                  width: 200,
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        viewModel.hikayeAltData[index].title
-                                            .toString(),
-                                        overflow: TextOverflow.fade,
-                                        style: TextStyle(
-                                          fontSize: 20,
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePostView(
+                                      home_singleData:
+                                          viewModel.hikayeAltData[index],
+                                    ),
+                                  ),
+                                ),
+                                child: AnimatedListItem(
+                                  index,
+                                  key: ValueKey<int>(index),
+                                  widget: Container(
+                                    height: 100,
+                                    width: 200,
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          viewModel.hikayeAltData[index].title
+                                              .toString(),
+                                          overflow: TextOverflow.fade,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                     ),

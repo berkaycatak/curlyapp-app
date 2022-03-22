@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class LastArticleStoryWidget extends StatelessWidget {
   final image, title, date;
@@ -8,6 +9,8 @@ class LastArticleStoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var unescape = new HtmlUnescape();
+    String _title = unescape.convert(title);
     return Stack(
       children: <Widget>[
         Container(
@@ -38,7 +41,7 @@ class LastArticleStoryWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 40.0, left: 8, right: 8),
                 child: Text(
-                  title,
+                  _title,
                   softWrap: true,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html2md/html2md.dart' as html2md;
+import 'package:html_unescape/html_unescape.dart';
 
 class HomeMansetWidget extends StatelessWidget {
   final bool fullSize;
@@ -11,10 +13,16 @@ class HomeMansetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var unescape = new HtmlUnescape();
+    String _title = unescape.convert(title);
+
     double width = fullSize ? MediaQuery.of(context).size.width - 15 : 126;
     double height = fullSize ? 250 : 200;
+    double height_s = fullSize ? 4.4 : 3;
+    int line = fullSize ? 2 : 3;
     double fontSize = fullSize ? 16 : 14;
     double bottomPadding = fullSize ? 5 : 15;
+
     return Padding(
       padding: const EdgeInsets.only(left: 8),
       child: Stack(
@@ -64,10 +72,10 @@ class HomeMansetWidget extends StatelessWidget {
                     left: 20,
                   ),
                   child: Container(
-                    height: height / 4.4,
+                    height: height / height_s,
                     child: Text(
-                      title,
-                      maxLines: 2,
+                      _title,
+                      maxLines: line,
                       overflow: TextOverflow.fade,
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(

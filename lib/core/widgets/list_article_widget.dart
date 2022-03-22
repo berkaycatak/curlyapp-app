@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape_small.dart';
 
 class ListArticleWidget extends StatelessWidget {
   final title, image, time, editor;
@@ -9,11 +10,14 @@ class ListArticleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var unescape = new HtmlUnescape();
+    String _title = unescape.convert(title);
+
     String _editor = editor != "" ? editor + " - " : "";
     print(_editor.length);
     if (_editor.length > 15) _editor = _editor.substring(0, 15) + "... -";
     return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 12, top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -35,7 +39,7 @@ class ListArticleWidget extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 1.8,
                 child: Text(
-                  title,
+                  _title,
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
                       color: Colors.black,

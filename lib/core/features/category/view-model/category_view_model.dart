@@ -37,7 +37,7 @@ abstract class _CategoryViewModelBase with Store {
       try {
         // manset
         final jsonresponse = json.decode(cevap.body);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
           data.add(Category.fromJson(jsonresponse[i]));
         }
       } catch (e) {

@@ -40,8 +40,12 @@ dependencies:
   build_runner: ^2.1.8
   dio: ^4.0.4
   http: ^0.13.4
-  flutter_html: ^2.0.0-nullsafety.1
+  flutter_html: ^2.0.0-nullsafety.1 
   google_fonts: ^2.3.1
+  transparent_image: ^2.0.0
+  flutter_markdown: ^0.6.9
+  html2md: ^1.2.5
+  html_unescape: ^2.0.0 
 
 dev_dependencies:
   flutter_test:

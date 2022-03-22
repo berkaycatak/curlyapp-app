@@ -88,30 +88,53 @@ class _CategoryViewState extends State<CategoryView> {
                         ),
                       );
                     } else if (index == 0) {
-                      return AnimatedListItem(
-                        index,
-                        key: ValueKey<int>(index),
-                        widget: CategoryFirstItemWidget(
-                          image: widget
-                              ._categoryViewModel.data[index].thumbnailFull,
-                          title: widget._categoryViewModel.data[index].title,
-                          date: widget._categoryViewModel.data[index].date,
-                          categoryName:
-                              widget._categoryViewModel.data[index].catName,
-                          content: widget._categoryViewModel.data[index].icerik,
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SinglePostView(
+                              category_singleData:
+                                  widget._categoryViewModel.data[index],
+                            ),
+                          ),
+                        ),
+                        child: AnimatedListItem(
+                          index,
+                          key: ValueKey<int>(index),
+                          widget: CategoryFirstItemWidget(
+                            image: widget
+                                ._categoryViewModel.data[index].thumbnailFull,
+                            title: widget._categoryViewModel.data[index].title,
+                            date: widget._categoryViewModel.data[index].date,
+                            categoryName:
+                                widget._categoryViewModel.data[index].catName,
+                            content:
+                                widget._categoryViewModel.data[index].icerik,
+                          ),
                         ),
                       );
                     } else {
-                      return AnimatedListItem(
-                        index,
-                        key: ValueKey<int>(index),
-                        widget: ListArticleWidget(
-                          title: widget._categoryViewModel.data[index].title,
-                          image: widget
-                              ._categoryViewModel.data[index].thumbnailFull,
-                          time: widget._categoryViewModel.data[index].date,
-                          editor:
-                              widget._categoryViewModel.data[index].authorName,
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SinglePostView(
+                              category_singleData:
+                                  widget._categoryViewModel.data[index],
+                            ),
+                          ),
+                        ),
+                        child: AnimatedListItem(
+                          index,
+                          key: ValueKey<int>(index),
+                          widget: ListArticleWidget(
+                            title: widget._categoryViewModel.data[index].title,
+                            image: widget
+                                ._categoryViewModel.data[index].thumbnailFull,
+                            time: widget._categoryViewModel.data[index].date,
+                            editor: widget
+                                ._categoryViewModel.data[index].authorName,
+                          ),
                         ),
                       );
                     }
