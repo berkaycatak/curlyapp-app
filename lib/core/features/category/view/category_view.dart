@@ -1,4 +1,5 @@
 import 'package:curlyapp/core/base/state/base_state.dart';
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/category/view-model/category_view_model.dart';
@@ -17,13 +18,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryView extends StatefulWidget {
   final int categoryId;
-
   final HomeViewModel homeViewModel;
-
   final _categoryViewModel = CategoryViewModel();
+  final ThemeController themeController;
 
   CategoryView(
-      {Key? key, required this.categoryId, required this.homeViewModel})
+      {Key? key,
+      required this.categoryId,
+      required this.homeViewModel,
+      required this.themeController})
       : super(key: key);
 
   @override
@@ -126,6 +129,7 @@ class _CategoryViewState extends BaseState<CategoryView> {
                             builder: (context) => SinglePostView(
                               category_singleData:
                                   widget._categoryViewModel.data[index],
+                              themeController: widget.themeController,
                             ),
                           ),
                         ),
@@ -152,6 +156,7 @@ class _CategoryViewState extends BaseState<CategoryView> {
                             builder: (context) => SinglePostView(
                               category_singleData:
                                   widget._categoryViewModel.data[index],
+                              themeController: widget.themeController,
                             ),
                           ),
                         ),

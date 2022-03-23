@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/error/view/error_404_view.dart';
 import 'package:curlyapp/core/features/error/view/error_connection_view.dart';
@@ -15,6 +16,10 @@ Future<List> data = [] as Future<List>;
 
 class SplashView extends StatefulWidget {
   final _viewModel = HomeViewModel();
+  final ThemeController themeDataController;
+
+  SplashView({Key? key, required this.themeDataController}) : super(key: key);
+
   @override
   State<SplashView> createState() => _SplashViewState();
 }
@@ -29,6 +34,7 @@ class _SplashViewState extends State<SplashView> {
           MaterialPageRoute(
             builder: (BuildContext context) => HomeView(
               viewModel: widget._viewModel,
+              themeDataController: widget.themeDataController,
             ),
           ),
           (route) => false,

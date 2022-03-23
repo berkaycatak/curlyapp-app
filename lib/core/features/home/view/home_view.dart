@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/view/category_view.dart';
 import 'package:curlyapp/core/features/drawer/view/edited_drawer.dart';
@@ -18,8 +19,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HomeView extends StatelessWidget {
   final HomeViewModel viewModel;
-
-  const HomeView({Key? key, required this.viewModel}) : super(key: key);
+  final ThemeController themeDataController;
+  HomeView(
+      {Key? key, required this.viewModel, required this.themeDataController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +31,20 @@ class HomeView extends StatelessWidget {
         return Scaffold(
           //backgroundColor: Color.fromARGB(255, 35, 37, 51),
           appBar: AppBar(
+            iconTheme: IconThemeData(
+                color: themeDataController.isDark
+                    ? Theme.of(context).hintColor
+                    : Colors.white),
             actions: [
               IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () => viewModel.getHomepage(1),
+                icon: Icon(
+                  themeDataController.isDark
+                      ? Icons.wb_sunny_outlined
+                      : Icons.sunny,
+                ),
+                onPressed: () {
+                  themeDataController.changeTheme();
+                },
               ),
             ],
             centerTitle: true,
@@ -42,18 +55,26 @@ class HomeView extends StatelessWidget {
               ),
             ),
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.centerRight,
-                    colors: <Color>[
-                      Color.fromARGB(255, 224, 116, 15),
-                      Color.fromARGB(255, 253, 30, 168),
-                    ]),
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[
+                    themeDataController.isDark
+                        ? Color.fromARGB(255, 66, 34, 5)
+                        : Color.fromARGB(255, 224, 116, 15),
+                    themeDataController.isDark
+                        ? Color.fromARGB(255, 105, 11, 69)
+                        : Color.fromARGB(255, 253, 30, 168),
+                  ],
+                ),
               ),
             ),
           ),
-          drawer: MyHomePage(homeViewModel: viewModel),
+          drawer: MyHomePage(
+            homeViewModel: viewModel,
+            themeController: themeDataController,
+          ),
           body: RefreshIndicator(
             onRefresh: () => viewModel.getHomepage(1),
             child: (viewModel.isServiceRequestLoading == STATUS_LOADING)
@@ -82,6 +103,8 @@ class HomeView extends StatelessWidget {
                                                   SinglePostView(
                                                 home_singleData:
                                                     viewModel.mansetData[index],
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -124,6 +147,8 @@ class HomeView extends StatelessWidget {
                                                   SinglePostView(
                                                 home_singleData:
                                                     viewModel.mansetData[index],
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -175,6 +200,8 @@ class HomeView extends StatelessWidget {
                                                         .mansetAltData[0]
                                                         .catId ??
                                                     1,
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -215,6 +242,8 @@ class HomeView extends StatelessWidget {
                                                   SinglePostView(
                                                 home_singleData: viewModel
                                                     .mansetAltData[index],
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -263,6 +292,8 @@ class HomeView extends StatelessWidget {
                                                 categoryId: viewModel
                                                         .hikayeData[0].catId ??
                                                     1,
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -306,6 +337,8 @@ class HomeView extends StatelessWidget {
                                                     SinglePostView(
                                                   home_singleData: viewModel
                                                       .hikayeData[index],
+                                                  themeController:
+                                                      themeDataController,
                                                 ),
                                               ),
                                             ),
@@ -356,6 +389,8 @@ class HomeView extends StatelessWidget {
                                                         .hikayeAltData[0]
                                                         .catId ??
                                                     1,
+                                                themeController:
+                                                    themeDataController,
                                               ),
                                             ),
                                           ),
@@ -404,6 +439,8 @@ class HomeView extends StatelessWidget {
                                                     SinglePostView(
                                                   home_singleData: viewModel
                                                       .hikayeAltData[index],
+                                                  themeController:
+                                                      themeDataController,
                                                 ),
                                               ),
                                             ),

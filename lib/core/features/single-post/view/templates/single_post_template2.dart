@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/home/model/home.dart';
@@ -9,15 +10,35 @@ import 'package:html2md/html2md.dart' as html2md;
 class SinglePostTemplate2 extends StatelessWidget {
   final Home? home_singleData;
   final Category? category_singleData;
+  final ThemeController themeDataController;
 
   const SinglePostTemplate2(
-      {Key? key, this.home_singleData, this.category_singleData})
+      {Key? key,
+      this.home_singleData,
+      this.category_singleData,
+      required this.themeDataController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: themeDataController.isDark
+                ? Theme.of(context).hintColor
+                : Colors.white),
+        actions: [
+          IconButton(
+            icon: Icon(
+              themeDataController.isDark
+                  ? Icons.wb_sunny_outlined
+                  : Icons.sunny,
+            ),
+            onPressed: () {
+              themeDataController.changeTheme();
+            },
+          ),
+        ],
         centerTitle: true,
         title: SizedBox(
           height: 30,
@@ -28,22 +49,21 @@ class SinglePostTemplate2 extends StatelessWidget {
           ),
         ),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[
-                  Color.fromARGB(255, 224, 116, 15),
-                  Color.fromARGB(255, 253, 30, 168),
-                ]),
+              begin: Alignment.bottomLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                themeDataController.isDark
+                    ? Color.fromARGB(255, 66, 34, 5)
+                    : Color.fromARGB(255, 224, 116, 15),
+                themeDataController.isDark
+                    ? Color.fromARGB(255, 105, 11, 69)
+                    : Color.fromARGB(255, 253, 30, 168),
+              ],
+            ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.share),
-          ),
-        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -55,7 +75,7 @@ class SinglePostTemplate2 extends StatelessWidget {
                   child: Image.network(
                     home_singleData?.thumbnailFull ??
                         category_singleData?.thumbnailFull ??
-                        "",
+                        TRANSPARENT_IMAGE_URL,
                     fit: BoxFit.cover,
                     filterQuality: FilterQuality.medium,
                   ),
@@ -69,14 +89,14 @@ class SinglePostTemplate2 extends StatelessWidget {
                 height: MediaQuery.of(context).size.height / 4.5,
               ),
               Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(15),
                     topLeft: Radius.circular(15),
                     bottomRight: Radius.circular(0),
                     bottomLeft: Radius.circular(0),
                   ),
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                         color: Colors.black,

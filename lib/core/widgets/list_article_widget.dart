@@ -42,7 +42,6 @@ class ListArticleWidget extends StatelessWidget {
                   _title,
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
-                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 15,
                     ),
@@ -58,7 +57,7 @@ class ListArticleWidget extends StatelessWidget {
                       _editor,
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Color.fromARGB(255, 114, 114, 114),
+                          color: Theme.of(context).hintColor,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -69,7 +68,7 @@ class ListArticleWidget extends StatelessWidget {
                       time,
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Color.fromARGB(255, 114, 114, 114),
+                          color: Theme.of(context).hintColor,
                           fontWeight: FontWeight.w400,
                         ),
                       ),

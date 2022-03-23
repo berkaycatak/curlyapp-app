@@ -1,6 +1,7 @@
-import 'package:curlyapp/core/features/category/page/view/page_view.dart';
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/features/category/view/category_view.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
+import 'package:curlyapp/core/features/page/view/page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -8,8 +9,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   final HomeViewModel homeViewModel;
+  final ThemeController themeController;
 
-  const MyHomePage({Key? key, required this.homeViewModel}) : super(key: key);
+
+  const MyHomePage({Key? key, required this.homeViewModel, required this.themeController}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -54,8 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.deepPurple,
                       textDirection: TextDirection.rtl,
                     ),
-                    title: Text("Anasayfa",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(
+                      "Anasayfa",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Divider(
@@ -67,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     "Kategoriler",
                     style: GoogleFonts.poppins(
-                      color: Color.fromARGB(255, 65, 64, 64),
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -96,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     .homeViewModel.categories[index].categoryId
                                     .toString()),
                                 homeViewModel: widget.homeViewModel,
+                                themeController: widget.themeController,
                               ),
                             ),
                           );
@@ -113,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     "Sayfalar",
                     style: GoogleFonts.poppins(
-                      color: Color.fromARGB(255, 65, 64, 64),
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -135,7 +139,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SinglePageView(home_data: widget.homeViewModel, pages: widget.homeViewModel.pages[index])),
+                              builder: (context) => SinglePageView(
+                                  home_data: widget.homeViewModel,
+                                  pages: widget.homeViewModel.pages[index])),
                         ),
                       );
                     },
@@ -151,7 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     "Bizi Sosyal Medya'da Takip Et!",
                     style: GoogleFonts.poppins(
-                      color: Color.fromARGB(255, 65, 64, 64),
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
