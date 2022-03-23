@@ -52,7 +52,7 @@ class HomeMansetWidget extends StatelessWidget {
                       0.0,
                       0.7
                     ]),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
               ),
               width: width,
               height: height,

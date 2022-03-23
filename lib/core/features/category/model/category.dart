@@ -7,7 +7,7 @@ class Category {
   String? thumbnailSmall;
   String? thumbnailFull;
   String? date;
-  List<int>? catId;
+  int? catId;
   String? catName;
   String? authorName;
   String? authorImage;
@@ -35,7 +35,7 @@ class Category {
     thumbnailSmall = json['thumbnail_small'];
     thumbnailFull = json['thumbnail_full'];
     date = json['date'];
-    catId = json['cat_id'].cast<int>();
+    catId = json['cat_id'];
     catName = json['cat_name'];
     authorName = json['author_name'];
     authorImage = json['author_image'];

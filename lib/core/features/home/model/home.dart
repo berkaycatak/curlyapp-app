@@ -9,6 +9,7 @@ class Home {
   String? thumbnailSmall;
   String? thumbnailFull;
   String? date;
+  int? catId;
   String? catName;
   String? authorName;
   String? authorImage;
@@ -24,6 +25,7 @@ class Home {
       this.thumbnailSmall,
       this.thumbnailFull,
       this.date,
+      this.catId,
       this.catName,
       this.authorName,
       this.authorImage});
@@ -39,6 +41,7 @@ class Home {
     thumbnailSmall = json['thumbnail_small'];
     thumbnailFull = json['thumbnail_full'];
     date = json['date'];
+    catId = json['cat_id'];
     catName = json['cat_name'];
     authorName = json['author_name'];
     authorImage = json['author_image'];
@@ -56,6 +59,7 @@ class Home {
     data['thumbnail_small'] = this.thumbnailSmall;
     data['thumbnail_full'] = this.thumbnailFull;
     data['date'] = this.date;
+    data['cat_id'] = this.catId;
     data['cat_name'] = this.catName;
     data['author_name'] = this.authorName;
     data['author_image'] = this.authorImage;

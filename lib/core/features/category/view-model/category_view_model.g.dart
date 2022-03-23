@@ -43,13 +43,13 @@ mixin _$CategoryViewModel on _CategoryViewModelBase, Store {
       Atom(name: '_CategoryViewModelBase.isServiceRequestLoading');
 
   @override
-  bool get isServiceRequestLoading {
+  String get isServiceRequestLoading {
     _$isServiceRequestLoadingAtom.reportRead();
     return super.isServiceRequestLoading;
   }
 
   @override
-  set isServiceRequestLoading(bool value) {
+  set isServiceRequestLoading(String value) {
     _$isServiceRequestLoadingAtom
         .reportWrite(value, super.isServiceRequestLoading, () {
       super.isServiceRequestLoading = value;
@@ -67,11 +67,11 @@ mixin _$CategoryViewModel on _CategoryViewModelBase, Store {
       ActionController(name: '_CategoryViewModelBase');
 
   @override
-  void changeRequest() {
+  void changeRequest(String string) {
     final _$actionInfo = _$_CategoryViewModelBaseActionController.startAction(
         name: '_CategoryViewModelBase.changeRequest');
     try {
-      return super.changeRequest();
+      return super.changeRequest(string);
     } finally {
       _$_CategoryViewModelBaseActionController.endAction(_$actionInfo);
     }

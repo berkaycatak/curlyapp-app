@@ -1,6 +1,10 @@
+import 'package:curlyapp/core/base/state/base_state.dart';
+import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/category/view-model/category_view_model.dart';
-import 'package:curlyapp/core/features/home/model/home.dart';
+import 'package:curlyapp/core/features/error/view/error_404_view.dart';
+import 'package:curlyapp/core/features/error/view/error_connection_view.dart';
+import 'package:curlyapp/core/features/error/view/error_no_result_view.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
 import 'package:curlyapp/core/features/single-post/view/single_post_view.dart';
 import 'package:curlyapp/core/widgets/animated_list_item.dart';
@@ -26,7 +30,7 @@ class CategoryView extends StatefulWidget {
   State<CategoryView> createState() => _CategoryViewState();
 }
 
-class _CategoryViewState extends State<CategoryView> {
+class _CategoryViewState extends BaseState<CategoryView> {
   @override
   void initState() {
     super.initState();
@@ -42,19 +46,46 @@ class _CategoryViewState extends State<CategoryView> {
         title: SizedBox(
           height: 40,
           child: Image.network(
-            widget.homeViewModel.mansetData[0].logoUrl ??
-                widget.homeViewModel.mansetData[1].logoUrl ??
-                widget.homeViewModel.mansetData[2].logoUrl ??
-                widget.homeViewModel.mansetData[3].logoUrl ??
-                "https://kisavoz.com/wp-content/uploads/2018/06/Ba%C5%9Fl%C4%B1ks%C4%B1z-1-3-1.jpg",
+            widget.homeViewModel.settings[0].logoUrl ?? TRANSPARENT_IMAGE_URL,
           ),
         ),
         backgroundColor: Colors.transparent,
+        actions: [
+          IconButton(
+            onPressed: () =>
+                widget._categoryViewModel.getData(widget.categoryId, 1),
+            icon: Icon(Icons.refresh),
+          )
+        ],
       ),
-      body: Observer(builder: (_) {
-        return widget._categoryViewModel.isServiceRequestLoading
-            ? const CategoryLoadingWidget()
-            : RefreshIndicator(
+      body: Observer(
+        builder: (_) {
+          if (widget._categoryViewModel.isServiceRequestLoading ==
+              STATUS_LOADING) {
+            return const CategoryLoadingWidget();
+          } else if (widget._categoryViewModel.isServiceRequestLoading ==
+              STATUS_ERROR) {
+            return Error404View();
+          } else if (widget._categoryViewModel.isServiceRequestLoading ==
+              STATUS_NO_INTERNET) {
+            return ErrorConnectionView();
+          } else {
+            if (widget._categoryViewModel.data.length == 0) {
+              return ErrorNoResultView(
+                widget: FlatButton(
+                  color: Color(0xFF6B92F2),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  onPressed: () =>
+                      widget._categoryViewModel.getData(widget.categoryId, 1),
+                  child: Text(
+                    "Tekrar Dene".toUpperCase(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              );
+            } else {
+              return RefreshIndicator(
                 onRefresh: () =>
                     widget._categoryViewModel.getData(widget.categoryId, 1),
                 child: ListView.separated(
@@ -143,7 +174,10 @@ class _CategoryViewState extends State<CategoryView> {
                       Divider(),
                 ),
               );
-      }),
+            }
+          }
+        },
+      ),
     );
   }
 }
@@ -161,6 +195,8 @@ class CategoryFirstItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _content = content;
+    if (_content.length > 200) _content = _content.substring(0, 200);
     return Container(
       height: 350,
       child: Stack(
@@ -181,11 +217,11 @@ class CategoryFirstItemWidget extends StatelessWidget {
                 ],
                 stops: [0, 0.6],
               ),
-              borderRadius: BorderRadius.circular(20),
             ),
             height: 350,
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
@@ -233,7 +269,7 @@ class CategoryFirstItemWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
                 child: Html(
-                  data: content + "...",
+                  data: _content + "...",
                   style: {
                     "body": Style(
                       color: Color.fromARGB(255, 190, 190, 190),

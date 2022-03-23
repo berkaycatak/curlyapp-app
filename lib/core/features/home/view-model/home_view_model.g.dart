@@ -69,17 +69,32 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
     });
   }
 
+  final _$settingsAtom = Atom(name: '_HomeViewModelBase.settings');
+
+  @override
+  List<Settings> get settings {
+    _$settingsAtom.reportRead();
+    return super.settings;
+  }
+
+  @override
+  set settings(List<Settings> value) {
+    _$settingsAtom.reportWrite(value, super.settings, () {
+      super.settings = value;
+    });
+  }
+
   final _$isServiceRequestLoadingAtom =
       Atom(name: '_HomeViewModelBase.isServiceRequestLoading');
 
   @override
-  bool get isServiceRequestLoading {
+  String get isServiceRequestLoading {
     _$isServiceRequestLoadingAtom.reportRead();
     return super.isServiceRequestLoading;
   }
 
   @override
-  set isServiceRequestLoading(bool value) {
+  set isServiceRequestLoading(String value) {
     _$isServiceRequestLoadingAtom
         .reportWrite(value, super.isServiceRequestLoading, () {
       super.isServiceRequestLoading = value;
@@ -98,23 +113,11 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
       ActionController(name: '_HomeViewModelBase');
 
   @override
-  void addData(List<Home> _manset, List<Home> _mansetAlt, List<Home> _hikaye,
-      List<Home> _hikayeAlt) {
-    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
-        name: '_HomeViewModelBase.addData');
-    try {
-      return super.addData(_manset, _mansetAlt, _hikaye, _hikayeAlt);
-    } finally {
-      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void changeRequest() {
+  void changeRequest(String string) {
     final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
         name: '_HomeViewModelBase.changeRequest');
     try {
-      return super.changeRequest();
+      return super.changeRequest(string);
     } finally {
       _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -127,6 +130,7 @@ mansetData: ${mansetData},
 mansetAltData: ${mansetAltData},
 hikayeData: ${hikayeData},
 hikayeAltData: ${hikayeAltData},
+settings: ${settings},
 isServiceRequestLoading: ${isServiceRequestLoading}
     ''';
   }

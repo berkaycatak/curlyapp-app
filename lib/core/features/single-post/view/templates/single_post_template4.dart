@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/home/model/home.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class SinglePostTemplate4 extends StatelessWidget {
           child: Image.network(
             home_singleData?.logoUrl ??
                 category_singleData?.logourl ??
-                "https://kisavoz.com/wp-content/uploads/2018/06/Ba%C5%9Fl%C4%B1ks%C4%B1z-1-3-1.jpg",
+                TRANSPARENT_IMAGE_URL,
           ),
         ),
         flexibleSpace: Container(

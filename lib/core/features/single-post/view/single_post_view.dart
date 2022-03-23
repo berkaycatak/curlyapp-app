@@ -16,22 +16,23 @@ class SinglePostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (home_singleData?.postStyle == 1 || home_singleData!.postStyle == 1) {
+    if (home_singleData?.postStyle == "1" ||
+        home_singleData?.postStyle == "1") {
       return SinglePostTemplate1(
           home_singleData: home_singleData,
           category_singleData: category_singleData);
-    } else if (home_singleData?.postStyle == 2 ||
-        home_singleData!.postStyle == 2) {
+    } else if (home_singleData?.postStyle == "2" ||
+        home_singleData?.postStyle == "2") {
       return SinglePostTemplate2(
           home_singleData: home_singleData,
           category_singleData: category_singleData);
-    } else if (home_singleData?.postStyle == 3 ||
-        home_singleData!.postStyle == 3) {
+    } else if (home_singleData?.postStyle == "3" ||
+        home_singleData?.postStyle == "3") {
       return SinglePostTemplate3(
           home_singleData: home_singleData,
           category_singleData: category_singleData);
-    } else if (home_singleData?.postStyle == 4 ||
-        home_singleData!.postStyle == 4) {
+    } else if (home_singleData?.postStyle == "4" ||
+        home_singleData?.postStyle == "4") {
       return SinglePostTemplate4(
           home_singleData: home_singleData,
           category_singleData: category_singleData);
