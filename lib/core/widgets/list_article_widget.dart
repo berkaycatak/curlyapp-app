@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 
 class ListArticleWidget extends StatelessWidget {
-  final title, image, time, editor;
+  final title, image, time, editor, darkMode;
   const ListArticleWidget(
-      {Key? key, this.title, this.image, this.time, this.editor})
+      {Key? key, this.title, this.image, this.time, this.editor, this.darkMode})
       : super(key: key);
 
   @override
@@ -21,16 +21,37 @@ class ListArticleWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image(
-                image: NetworkImage(image),
-                fit: BoxFit.cover,
+          Stack(
+            children: [
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image(
+                    image: NetworkImage(image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
+              darkMode ?
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Color.fromARGB(90, 7, 0, 0),
+                      Color.fromARGB(90, 0, 0, 0)
+                    ],
+                    stops: [0.0, 0],
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ) : const SizedBox(),
+            ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,

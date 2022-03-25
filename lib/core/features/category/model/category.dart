@@ -1,6 +1,7 @@
 class Category {
   int? id;
   String? title;
+  String? url;
   String? logourl;
   String? postStil;
   String? icerik;
@@ -15,6 +16,7 @@ class Category {
   Category(
       {this.id,
       this.title,
+      this.url,
       this.logourl,
       this.postStil,
       this.icerik,
@@ -29,6 +31,7 @@ class Category {
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
+    url = json['url'];
     logourl = json['logourl'];
     postStil = json['postStil'];
     icerik = json['icerik'];
@@ -45,6 +48,7 @@ class Category {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
+    data['url'] = this.url;
     data['logourl'] = this.logourl;
     data['postStil'] = this.postStil;
     data['icerik'] = this.icerik;

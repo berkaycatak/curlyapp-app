@@ -2,10 +2,13 @@ import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/home/model/home.dart';
+import 'package:curlyapp/core/features/single-post/view/ShowImageFullSlider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SinglePostTemplate2 extends StatelessWidget {
   final Home? home_singleData;
@@ -21,6 +24,8 @@ class SinglePostTemplate2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> funSad() async {}
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -29,13 +34,15 @@ class SinglePostTemplate2 extends StatelessWidget {
                 : Colors.white),
         actions: [
           IconButton(
-            icon: Icon(
-              themeDataController.isDark
-                  ? Icons.wb_sunny_outlined
-                  : Icons.sunny,
+            icon: const Icon(
+              Icons.share,
             ),
             onPressed: () {
-              themeDataController.changeTheme();
+              try {
+                String shareText =
+                    '"${home_singleData?.title ?? category_singleData?.title ?? ""}" ${home_singleData?.url ?? category_singleData?.url ?? ""}';
+                Share.share(shareText);
+              } catch (e) {}
             },
           ),
         ],
@@ -65,145 +72,198 @@ class SinglePostTemplate2 extends StatelessWidget {
           ),
         ),
       ),
-      body: Stack(
-        children: <Widget>[
-          Stack(
-            alignment: AlignmentDirectional.topCenter,
-            children: <Widget>[
-              Container(
-                child: ClipRRect(
-                  child: Image.network(
-                    home_singleData?.thumbnailFull ??
-                        category_singleData?.thumbnailFull ??
-                        TRANSPARENT_IMAGE_URL,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.medium,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          ListView(
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 4.5,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(0),
-                    bottomLeft: Radius.circular(0),
-                  ),
-                  color: Theme.of(context).cardColor,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(0, -1),
-                        blurRadius: 20),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20.0, right: 20, top: 20),
-                      child: Container(
-                        child: MarkdownBody(
-                          selectable: true,
-                          data: html2md.convert(
-                            home_singleData?.title ??
-                                category_singleData?.title ??
-                                "",
-                          ),
-                          styleSheet: MarkdownStyleSheet(
-                            p: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
+      body: RefreshIndicator(
+        onRefresh: (() => funSad()),
+        child: Stack(
+          children: <Widget>[
+            Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: <Widget>[
+                Container(
+                  child: ClipRRect(
+                    child: Image.network(
+                      home_singleData?.thumbnailFull ??
+                          category_singleData?.thumbnailFull ??
+                          TRANSPARENT_IMAGE_URL,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.medium,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, right: 10, bottom: 10),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  home_singleData?.authorName ??
-                                      category_singleData?.authorName ??
-                                      "",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 131, 131, 131),
-                                  ),
-                                ),
-                                Text(
-                                  home_singleData?.date ??
-                                      category_singleData?.date ??
-                                      "",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 131, 131, 131),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Divider(height: 20),
-                          /*
-                      Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
-                        child: AdmobBanner(
-                          adUnitId: untilId,
-                          adSize: AdmobBannerSize.LARGE_BANNER,
-                        ),
-                      ),
-                      */
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: MarkdownBody(
-                              selectable: true,
-                              data: html2md.convert(
-                                home_singleData?.content ??
-                                    category_singleData?.icerik ??
-                                    "",
-                              ),
-                              styleSheet: MarkdownStyleSheet(
-                                p: GoogleFonts.poppins(),
-                              ),
-                            ),
-                          ),
-                          Divider(),
-                          /*
-                      Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
-                        child: AdmobBanner(
-                          adUnitId: untilId,
-                          adSize: AdmobBannerSize.LARGE_BANNER,
-                        ),
-                      ),
-                      */
-                        ],
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            ListView(
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 4.5,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(0),
+                      bottomLeft: Radius.circular(0),
+                    ),
+                    color: Theme.of(context).cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(0, -1),
+                          blurRadius: 20),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, top: 20),
+                        child: Container(
+                          child: MarkdownBody(
+                            selectable: true,
+                            data: html2md.convert(
+                              home_singleData?.title ??
+                                  category_singleData?.title ??
+                                  "",
+                            ),
+                            styleSheet: MarkdownStyleSheet(
+                              p: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, right: 10, bottom: 10),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10.0, left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    home_singleData?.authorName ??
+                                        category_singleData?.authorName ??
+                                        "",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      color: Color.fromARGB(255, 131, 131, 131),
+                                    ),
+                                  ),
+                                  Text(
+                                    home_singleData?.date ??
+                                        category_singleData?.date ??
+                                        "",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      color: Color.fromARGB(255, 131, 131, 131),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Divider(height: 20),
+                            /*
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: AdmobBanner(
+                            adUnitId: untilId,
+                            adSize: AdmobBannerSize.LARGE_BANNER,
+                          ),
+                        ),
+                        */
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: MarkdownBody(
+                                selectable: true,
+                                data: html2md.convert(
+                                  home_singleData?.content ??
+                                      category_singleData?.icerik ??
+                                      "",
+                                ),
+                                styleSheet: MarkdownStyleSheet(
+                                  p: GoogleFonts.poppins(),
+                                ),
+                                onTapLink: (text, href, title) {
+                                  try {
+                                    launch(href ?? "");
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                imageBuilder: (uri, title, alt) {
+                                  String url = "http://" + uri.host + uri.path;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8, bottom: 8),
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SliderShowFullmages(
+                                                    url: url,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Image.network(
+                                              url,
+                                              fit: BoxFit.fitHeight,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              errorBuilder: (BuildContext
+                                                          context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) =>
+                                                  const SizedBox(),
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Text(title ?? ""),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            Divider(),
+                            /*
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: AdmobBanner(
+                            adUnitId: untilId,
+                            adSize: AdmobBannerSize.LARGE_BANNER,
+                          ),
+                        ),
+                        */
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -118,6 +118,8 @@ class HomeView extends StatelessWidget {
                                                   .thumbnailFull,
                                               title: viewModel
                                                   .mansetData[index].title,
+                                              darkMode:
+                                                  themeDataController.isDark,
                                             ),
                                           ),
                                         );
@@ -162,6 +164,8 @@ class HomeView extends StatelessWidget {
                                                   .thumbnailFull,
                                               title: viewModel
                                                   .mansetData[index].title,
+                                              darkMode:
+                                                  themeDataController.isDark,
                                             ),
                                           ),
                                         );
@@ -260,6 +264,8 @@ class HomeView extends StatelessWidget {
                                                 editor: viewModel
                                                     .mansetAltData[index]
                                                     .authorName,
+                                                darkMode:
+                                                    themeDataController.isDark,
                                               )),
                                         );
                                       },
@@ -353,6 +359,8 @@ class HomeView extends StatelessWidget {
                                                     .thumbnailFull,
                                                 date: viewModel
                                                     .hikayeData[index].date,
+                                                darkMode:
+                                                    themeDataController.isDark,
                                               ),
                                             ),
                                           );
@@ -458,6 +466,8 @@ class HomeView extends StatelessWidget {
                                                 author: viewModel
                                                     .hikayeAltData[index]
                                                     .authorName,
+                                                darkMode:
+                                                    themeDataController.isDark,
                                               ),
                                             ),
                                           );

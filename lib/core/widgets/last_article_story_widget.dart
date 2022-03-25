@@ -3,8 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 class LastArticleStoryWidget extends StatelessWidget {
-  final image, title, date;
-  const LastArticleStoryWidget({Key? key, this.image, this.title, this.date})
+  final image, title, date, darkMode;
+  const LastArticleStoryWidget(
+      {Key? key, this.image, this.title, this.date, this.darkMode})
       : super(key: key);
 
   @override
@@ -24,13 +25,23 @@ class LastArticleStoryWidget extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter,
-                colors: [Colors.grey.withOpacity(0.0), Colors.black],
-                stops: [0.0, 1.2],
-              ),
-              borderRadius: BorderRadius.circular(20)),
+              gradient: darkMode
+                  ? LinearGradient(
+                      begin: FractionalOffset.topCenter,
+                      end: FractionalOffset.bottomCenter,
+                      colors: [
+                        Color.fromARGB(90, 7, 0, 0),
+                        Color.fromARGB(199, 0, 0, 0)
+                      ],
+                      stops: [0.0, 1.2],
+                    )
+                  : LinearGradient(
+                      begin: FractionalOffset.topCenter,
+                      end: FractionalOffset.bottomCenter,
+                      colors: [Colors.grey.withOpacity(0.0), Colors.black],
+                      stops: [0.0, 1],
+                    ),
+              borderRadius: BorderRadius.circular(12)),
           width: 190,
         ),
         Container(
@@ -46,9 +57,11 @@ class LastArticleStoryWidget extends StatelessWidget {
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(
+                    textStyle: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: darkMode
+                          ? const Color.fromARGB(255, 214, 213, 213)
+                          : Colors.white,
                       fontSize: 17,
                     ),
                   ),

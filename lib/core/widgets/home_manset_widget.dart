@@ -7,8 +7,13 @@ class HomeMansetWidget extends StatelessWidget {
   final bool fullSize;
   final imageUrl;
   final title;
+  final darkMode;
   const HomeMansetWidget(
-      {Key? key, required this.fullSize, this.imageUrl, this.title})
+      {Key? key,
+      required this.fullSize,
+      this.imageUrl,
+      this.title,
+      this.darkMode})
       : super(key: key);
 
   @override
@@ -37,27 +42,42 @@ class HomeMansetWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 100),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Color.fromARGB(0, 255, 255, 255),
-                      Color.fromARGB(199, 0, 0, 0)
-                    ],
-                    stops: [
-                      0.0,
-                      0.7
-                    ]),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              width: width,
-              height: height,
-            ),
-          ),
+          darkMode
+              ? Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: FractionalOffset.topCenter,
+                      end: FractionalOffset.bottomCenter,
+                      colors: [
+                        Color.fromARGB(90, 7, 0, 0),
+                        Color.fromARGB(199, 0, 0, 0)
+                      ],
+                      stops: [0.0, 0.7],
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  width: width,
+                  height: height,
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                        colors: [
+                          Color.fromARGB(0, 255, 255, 255),
+                          Color.fromARGB(199, 0, 0, 0)
+                        ],
+                        stops: [0.0, 0.7],
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    width: width,
+                    height: height,
+                  ),
+                ),
           Container(
             width: width,
             child: Padding(
@@ -80,7 +100,9 @@ class HomeMansetWidget extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontSize: fontSize,
-                          color: Color.fromARGB(255, 231, 231, 231),
+                          color: darkMode
+                              ? Color.fromARGB(255, 214, 213, 213)
+                              : Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

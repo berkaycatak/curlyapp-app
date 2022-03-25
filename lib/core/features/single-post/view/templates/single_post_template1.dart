@@ -2,11 +2,14 @@ import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/home/model/home.dart';
+import 'package:curlyapp/core/features/single-post/view/ShowImageFullSlider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:url_launcher/url_launcher.dart';
 
 class SinglePostTemplate1 extends StatelessWidget {
   final Home? home_singleData;
@@ -23,7 +26,6 @@ class SinglePostTemplate1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<void> funSad() async {}
-    ;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -32,13 +34,15 @@ class SinglePostTemplate1 extends StatelessWidget {
                 : Colors.white),
         actions: [
           IconButton(
-            icon: Icon(
-              themeDataController.isDark
-                  ? Icons.wb_sunny_outlined
-                  : Icons.sunny,
+            icon: const Icon(
+              Icons.share,
             ),
             onPressed: () {
-              themeDataController.changeTheme();
+              try {
+                String shareText =
+                    '"${home_singleData?.title ?? category_singleData?.title ?? ""}" ${home_singleData?.url ?? category_singleData?.url ?? ""}';
+                Share.share(shareText);
+              } catch (e) {}
             },
           ),
         ],
@@ -129,13 +133,27 @@ class SinglePostTemplate1 extends StatelessWidget {
                       child: Container(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Center(
-                            child: FadeInImage.memoryNetwork(
-                              image: home_singleData?.thumbnailFull ??
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => SliderShowFullmages(
+                                    url: home_singleData?.thumbnailFull ??
+                                        category_singleData?.thumbnailFull ??
+                                        "",
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Image.network(
+                              home_singleData?.thumbnailFull ??
                                   category_singleData?.thumbnailFull ??
                                   "",
-                              fadeInDuration: Duration(milliseconds: 300),
-                              placeholder: kTransparentImage,
+                              fit: BoxFit.fitHeight,
+                              width: MediaQuery.of(context).size.width,
+                              errorBuilder: (BuildContext context, Object error,
+                                      StackTrace? stackTrace) =>
+                                  const SizedBox(),
                             ),
                           ),
                         ),
@@ -160,6 +178,50 @@ class SinglePostTemplate1 extends StatelessWidget {
                       styleSheet: MarkdownStyleSheet(
                         p: GoogleFonts.poppins(),
                       ),
+                      onTapLink: (text, href, title) {
+                        try {
+                          launch(href ?? "");
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      imageBuilder: (uri, title, alt) {
+                        String url = "http://" + uri.host + uri.path;
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            SliderShowFullmages(
+                                          url: url,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Image.network(
+                                    url,
+                                    fit: BoxFit.fitHeight,
+                                    width: MediaQuery.of(context).size.width,
+                                    errorBuilder: (BuildContext context,
+                                            Object error,
+                                            StackTrace? stackTrace) =>
+                                        const SizedBox(),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(title ?? ""),
+                              )
+                            ],
+                          ),
+                        );
+                      },
                     ),
                     Divider(),
                     /*SosyalMedyadaPaylas(
