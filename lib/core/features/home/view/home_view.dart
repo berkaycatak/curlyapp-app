@@ -13,17 +13,23 @@ import 'package:curlyapp/core/widgets/last_article_story_widget.dart';
 import 'package:curlyapp/core/widgets/list_article_widget.dart';
 import 'package:curlyapp/core/widgets/loading/home_loading_widget.dart';
 import 'package:curlyapp/core/widgets/see_all_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   final HomeViewModel viewModel;
   final ThemeController themeDataController;
   HomeView(
       {Key? key, required this.viewModel, required this.themeDataController})
       : super(key: key);
 
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -32,18 +38,18 @@ class HomeView extends StatelessWidget {
           //backgroundColor: Color.fromARGB(255, 35, 37, 51),
           appBar: AppBar(
             iconTheme: IconThemeData(
-                color: themeDataController.isDark
+                color: widget.themeDataController.isDark
                     ? Theme.of(context).hintColor
                     : Colors.white),
             actions: [
               IconButton(
                 icon: Icon(
-                  themeDataController.isDark
+                  widget.themeDataController.isDark
                       ? Icons.wb_sunny_outlined
                       : Icons.sunny,
                 ),
                 onPressed: () {
-                  themeDataController.changeTheme();
+                  widget.themeDataController.changeTheme();
                 },
               ),
             ],
@@ -51,7 +57,7 @@ class HomeView extends StatelessWidget {
             title: SizedBox(
               height: 30,
               child: Image.network(
-                viewModel.settings[0].logoUrl ?? TRANSPARENT_IMAGE_URL,
+                widget.viewModel.settings[0].logoUrl ?? TRANSPARENT_IMAGE_URL,
               ),
             ),
             flexibleSpace: Container(
@@ -60,10 +66,10 @@ class HomeView extends StatelessWidget {
                   begin: Alignment.bottomLeft,
                   end: Alignment.centerRight,
                   colors: <Color>[
-                    themeDataController.isDark
+                    widget.themeDataController.isDark
                         ? Color.fromARGB(255, 66, 34, 5)
                         : Color.fromARGB(255, 224, 116, 15),
-                    themeDataController.isDark
+                    widget.themeDataController.isDark
                         ? Color.fromARGB(255, 105, 11, 69)
                         : Color.fromARGB(255, 253, 30, 168),
                   ],
@@ -72,16 +78,17 @@ class HomeView extends StatelessWidget {
             ),
           ),
           drawer: MyHomePage(
-            homeViewModel: viewModel,
-            themeController: themeDataController,
+            homeViewModel: widget.viewModel,
+            themeController: widget.themeDataController,
           ),
           body: RefreshIndicator(
-            onRefresh: () => viewModel.getHomepage(1),
-            child: (viewModel.isServiceRequestLoading == STATUS_LOADING)
+            onRefresh: () => widget.viewModel.getHomepage(1),
+            child: (widget.viewModel.isServiceRequestLoading == STATUS_LOADING)
                 ? LoadingWidget()
-                : (viewModel.isServiceRequestLoading == STATUS_ERROR)
+                : (widget.viewModel.isServiceRequestLoading == STATUS_ERROR)
                     ? Error404View()
-                    : (viewModel.isServiceRequestLoading == STATUS_NO_INTERNET)
+                    : (widget.viewModel.isServiceRequestLoading ==
+                            STATUS_NO_INTERNET)
                         ? ErrorConnectionView()
                         : SafeArea(
                             child: SingleChildScrollView(
@@ -101,10 +108,11 @@ class HomeView extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   SinglePostView(
-                                                home_singleData:
-                                                    viewModel.mansetData[index],
+                                                home_singleData: widget
+                                                    .viewModel
+                                                    .mansetData[index],
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
@@ -113,13 +121,14 @@ class HomeView extends StatelessWidget {
                                             key: ValueKey<int>(index),
                                             widget: HomeMansetWidget(
                                               fullSize: true,
-                                              imageUrl: viewModel
+                                              imageUrl: widget
+                                                  .viewModel
                                                   .mansetData[index]
                                                   .thumbnailFull,
-                                              title: viewModel
+                                              title: widget.viewModel
                                                   .mansetData[index].title,
-                                              darkMode:
-                                                  themeDataController.isDark,
+                                              darkMode: widget
+                                                  .themeDataController.isDark,
                                             ),
                                           ),
                                         );
@@ -134,23 +143,26 @@ class HomeView extends StatelessWidget {
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       itemCount:
-                                          viewModel.mansetData.length - 1,
+                                          widget.viewModel.mansetData.length -
+                                              1,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        if (index == 0)
+                                        if (index == 0) {
                                           index = 1;
-                                        else
+                                        } else {
                                           index++;
+                                        }
                                         return GestureDetector(
                                           onTap: () => Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   SinglePostView(
-                                                home_singleData:
-                                                    viewModel.mansetData[index],
+                                                home_singleData: widget
+                                                    .viewModel
+                                                    .mansetData[index],
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
@@ -159,13 +171,14 @@ class HomeView extends StatelessWidget {
                                             key: ValueKey<int>(index),
                                             widget: HomeMansetWidget(
                                               fullSize: false,
-                                              imageUrl: viewModel
+                                              imageUrl: widget
+                                                  .viewModel
                                                   .mansetData[index]
                                                   .thumbnailFull,
-                                              title: viewModel
+                                              title: widget.viewModel
                                                   .mansetData[index].title,
-                                              darkMode:
-                                                  themeDataController.isDark,
+                                              darkMode: widget
+                                                  .themeDataController.isDark,
                                             ),
                                           ),
                                         );
@@ -186,7 +199,8 @@ class HomeView extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          viewModel.mansetAltData[0].catName ??
+                                          widget.viewModel.mansetAltData[0]
+                                                  .catName ??
                                               "",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
@@ -199,13 +213,14 @@ class HomeView extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   CategoryView(
-                                                homeViewModel: viewModel,
-                                                categoryId: viewModel
+                                                homeViewModel: widget.viewModel,
+                                                categoryId: widget
+                                                        .viewModel
                                                         .mansetAltData[0]
                                                         .catId ??
                                                     1,
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
@@ -231,11 +246,13 @@ class HomeView extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: viewModel.hikayeData.length * 125,
+                                    height: widget.viewModel.hikayeData.length *
+                                        125,
                                     child: ListView.builder(
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: viewModel.mansetAltData.length,
+                                      itemCount:
+                                          widget.viewModel.mansetAltData.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return GestureDetector(
@@ -244,28 +261,31 @@ class HomeView extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   SinglePostView(
-                                                home_singleData: viewModel
+                                                home_singleData: widget
+                                                    .viewModel
                                                     .mansetAltData[index],
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
                                           child: AnimatedListItem(index,
                                               key: ValueKey<int>(index),
                                               widget: ListArticleWidget(
-                                                title: viewModel
+                                                title: widget.viewModel
                                                     .mansetAltData[index].title,
-                                                image: viewModel
+                                                image: widget
+                                                    .viewModel
                                                     .mansetAltData[index]
                                                     .thumbnailFull,
-                                                time: viewModel
+                                                time: widget.viewModel
                                                     .mansetAltData[index].date,
-                                                editor: viewModel
+                                                editor: widget
+                                                    .viewModel
                                                     .mansetAltData[index]
                                                     .authorName,
-                                                darkMode:
-                                                    themeDataController.isDark,
+                                                darkMode: widget
+                                                    .themeDataController.isDark,
                                               )),
                                         );
                                       },
@@ -282,7 +302,9 @@ class HomeView extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          viewModel.hikayeData[0].catName ?? "",
+                                          widget.viewModel.hikayeData[0]
+                                                  .catName ??
+                                              "",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 17,
@@ -294,12 +316,12 @@ class HomeView extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   CategoryView(
-                                                homeViewModel: viewModel,
-                                                categoryId: viewModel
+                                                homeViewModel: widget.viewModel,
+                                                categoryId: widget.viewModel
                                                         .hikayeData[0].catId ??
                                                     1,
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
@@ -332,7 +354,8 @@ class HomeView extends StatelessWidget {
                                           const EdgeInsets.only(left: 10.0),
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: viewModel.hikayeData.length,
+                                        itemCount:
+                                            widget.viewModel.hikayeData.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return GestureDetector(
@@ -341,10 +364,11 @@ class HomeView extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     SinglePostView(
-                                                  home_singleData: viewModel
+                                                  home_singleData: widget
+                                                      .viewModel
                                                       .hikayeData[index],
-                                                  themeController:
-                                                      themeDataController,
+                                                  themeController: widget
+                                                      .themeDataController,
                                                 ),
                                               ),
                                             ),
@@ -352,15 +376,16 @@ class HomeView extends StatelessWidget {
                                               index,
                                               key: ValueKey<int>(index),
                                               widget: LastArticleStoryWidget(
-                                                title: viewModel
+                                                title: widget.viewModel
                                                     .hikayeData[index].title,
-                                                image: viewModel
+                                                image: widget
+                                                    .viewModel
                                                     .hikayeData[index]
                                                     .thumbnailFull,
-                                                date: viewModel
+                                                date: widget.viewModel
                                                     .hikayeData[index].date,
-                                                darkMode:
-                                                    themeDataController.isDark,
+                                                darkMode: widget
+                                                    .themeDataController.isDark,
                                               ),
                                             ),
                                           );
@@ -379,7 +404,8 @@ class HomeView extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          viewModel.hikayeAltData[0].catName ??
+                                          widget.viewModel.hikayeAltData[0]
+                                                  .catName ??
                                               "",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
@@ -392,13 +418,14 @@ class HomeView extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   CategoryView(
-                                                homeViewModel: viewModel,
-                                                categoryId: viewModel
+                                                homeViewModel: widget.viewModel,
+                                                categoryId: widget
+                                                        .viewModel
                                                         .hikayeAltData[0]
                                                         .catId ??
                                                     1,
                                                 themeController:
-                                                    themeDataController,
+                                                    widget.themeDataController,
                                               ),
                                             ),
                                           ),
@@ -435,8 +462,8 @@ class HomeView extends StatelessWidget {
                                       child: ListView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
-                                        itemCount:
-                                            viewModel.hikayeAltData.length,
+                                        itemCount: widget
+                                            .viewModel.hikayeAltData.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return GestureDetector(
@@ -445,10 +472,11 @@ class HomeView extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     SinglePostView(
-                                                  home_singleData: viewModel
+                                                  home_singleData: widget
+                                                      .viewModel
                                                       .hikayeAltData[index],
-                                                  themeController:
-                                                      themeDataController,
+                                                  themeController: widget
+                                                      .themeDataController,
                                                 ),
                                               ),
                                             ),
@@ -456,18 +484,20 @@ class HomeView extends StatelessWidget {
                                               index,
                                               key: ValueKey<int>(index),
                                               widget: BottomStoryArticleWidget(
-                                                title: viewModel
+                                                title: widget.viewModel
                                                     .hikayeAltData[index].title,
-                                                image: viewModel
+                                                image: widget
+                                                    .viewModel
                                                     .hikayeAltData[index]
                                                     .thumbnailFull,
-                                                date: viewModel
+                                                date: widget.viewModel
                                                     .hikayeAltData[index].date,
-                                                author: viewModel
+                                                author: widget
+                                                    .viewModel
                                                     .hikayeAltData[index]
                                                     .authorName,
-                                                darkMode:
-                                                    themeDataController.isDark,
+                                                darkMode: widget
+                                                    .themeDataController.isDark,
                                               ),
                                             ),
                                           );
