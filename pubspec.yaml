@@ -52,7 +52,7 @@ dependencies:
   firebase_core: ^1.13.1
   firebase_analytics: ^9.1.2
   admob_flutter: ^2.0.0
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

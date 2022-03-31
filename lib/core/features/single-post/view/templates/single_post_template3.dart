@@ -1,18 +1,18 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/model/category.dart';
 import 'package:curlyapp/core/features/home/model/home.dart';
 import 'package:curlyapp/core/features/single-post/view/ShowImageFullSlider.dart';
+import 'package:curlyapp/core/services/admob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html2md/html2md.dart' as html2md;
-import 'package:html2md/html2md.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SinglePostTemplate3 extends StatelessWidget {
+class SinglePostTemplate3 extends StatefulWidget {
   final Home? home_singleData;
   final Category? category_singleData;
   final ThemeController themeDataController;
@@ -25,14 +25,31 @@ class SinglePostTemplate3 extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<SinglePostTemplate3> createState() => _SinglePostTemplate3State();
+}
+
+class _SinglePostTemplate3State extends State<SinglePostTemplate3> {
+  final ams = AdMobService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    Admob.initialize();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String date = home_singleData?.date ?? category_singleData?.date ?? "";
-    String author_name =
-        home_singleData?.authorName ?? category_singleData?.authorName ?? "";
+    String date =
+        widget.home_singleData?.date ?? widget.category_singleData?.date ?? "";
+    String author_name = widget.home_singleData?.authorName ??
+        widget.category_singleData?.authorName ??
+        "";
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-            color: themeDataController.isDark
+            color: widget.themeDataController.isDark
                 ? Theme.of(context).hintColor
                 : Colors.white),
         actions: [
@@ -43,7 +60,7 @@ class SinglePostTemplate3 extends StatelessWidget {
             onPressed: () {
               try {
                 String shareText =
-                    '"${home_singleData?.title ?? category_singleData?.title ?? ""}" ${home_singleData?.url ?? category_singleData?.url ?? ""}';
+                    '"${widget.home_singleData?.title ?? widget.category_singleData?.title ?? ""}" ${widget.home_singleData?.url ?? widget.category_singleData?.url ?? ""}';
                 Share.share(shareText);
               } catch (e) {}
             },
@@ -53,8 +70,8 @@ class SinglePostTemplate3 extends StatelessWidget {
         title: SizedBox(
           height: 30,
           child: Image.network(
-            home_singleData?.logoUrl ??
-                category_singleData?.logourl ??
+            widget.home_singleData?.logoUrl ??
+                widget.category_singleData?.logourl ??
                 TRANSPARENT_IMAGE_URL,
           ),
         ),
@@ -64,10 +81,10 @@ class SinglePostTemplate3 extends StatelessWidget {
               begin: Alignment.bottomLeft,
               end: Alignment.centerRight,
               colors: <Color>[
-                themeDataController.isDark
+                widget.themeDataController.isDark
                     ? Color.fromARGB(255, 66, 34, 5)
                     : Color.fromARGB(255, 224, 116, 15),
-                themeDataController.isDark
+                widget.themeDataController.isDark
                     ? Color.fromARGB(255, 105, 11, 69)
                     : Color.fromARGB(255, 253, 30, 168),
               ],
@@ -83,8 +100,8 @@ class SinglePostTemplate3 extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 height: 300,
                 width: double.infinity,
-                child: Image.network(home_singleData?.thumbnailFull ??
-                    category_singleData?.thumbnailFull ??
+                child: Image.network(widget.home_singleData?.thumbnailFull ??
+                    widget.category_singleData?.thumbnailFull ??
                     TRANSPARENT_IMAGE_URL),
               ),
               Container(
@@ -98,8 +115,8 @@ class SinglePostTemplate3 extends StatelessWidget {
                     MarkdownBody(
                       selectable: true,
                       data: html2md.convert(
-                        home_singleData?.title ??
-                            category_singleData?.title ??
+                        widget.home_singleData?.title ??
+                            widget.category_singleData?.title ??
                             "",
                       ),
                       styleSheet: MarkdownStyleSheet(
@@ -119,26 +136,24 @@ class SinglePostTemplate3 extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     Divider(),
-                    /*
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      width: MediaQuery.of(context).size.width,
-                      child: AdmobBanner(
-                        adUnitId: untilId,
-                        adSize: AdmobBannerSize.LARGE_BANNER,
+                   
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 4.0, right: 4, top: 10, bottom: 10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width - 30,
+                        child: AdmobBanner(
+                          adUnitId: ams.getBannerAdId(),
+                          adSize: AdmobBannerSize.LARGE_BANNER,
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    */
-
                     MarkdownBody(
                       selectable: true,
                       data: html2md.convert(
-                        home_singleData?.content ??
-                            category_singleData?.icerik ??
+                        widget.home_singleData?.content ??
+                            widget.category_singleData?.icerik ??
                             "",
                       ),
                       styleSheet: MarkdownStyleSheet(
@@ -190,17 +205,18 @@ class SinglePostTemplate3 extends StatelessWidget {
                       },
                     ),
                     Divider(),
-                    /*
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      width: MediaQuery.of(context).size.width,
-                      child: AdmobBanner(
-                        adUnitId: untilId,
-                        adSize: AdmobBannerSize.LARGE_BANNER,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 4.0, right: 4, top: 10, bottom: 10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width - 30,
+                        child: AdmobBanner(
+                          adUnitId: ams.getBannerAdId(),
+                          adSize: AdmobBannerSize.LARGE_BANNER,
+                        ),
                       ),
                     ),
-                    */
                   ],
                 ),
               ),

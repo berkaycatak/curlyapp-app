@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:curlyapp/core/base/state/base_state.dart';
 import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
@@ -7,6 +8,7 @@ import 'package:curlyapp/core/features/error/view/error_connection_view.dart';
 import 'package:curlyapp/core/features/error/view/error_no_result_view.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
 import 'package:curlyapp/core/features/single-post/view/single_post_view.dart';
+import 'package:curlyapp/core/services/admob_service.dart';
 import 'package:curlyapp/core/widgets/animated_list_item.dart';
 import 'package:curlyapp/core/widgets/category_first_item_widget.dart';
 import 'package:curlyapp/core/widgets/list_article_widget.dart';
@@ -32,10 +34,14 @@ class CategoryView extends StatefulWidget {
 }
 
 class _CategoryViewState extends BaseState<CategoryView> {
+  final ams = AdMobService();
+
   @override
   void initState() {
     super.initState();
     widget._categoryViewModel.getData(widget.categoryId, 0);
+    WidgetsFlutterBinding.ensureInitialized();
+    Admob.initialize();
   }
 
   @override
@@ -131,19 +137,37 @@ class _CategoryViewState extends BaseState<CategoryView> {
                             ),
                           ),
                         ),
-                        child: AnimatedListItem(
-                          index,
-                          key: ValueKey<int>(index),
-                          widget: CategoryFirstItemWidget(
-                            image: widget
-                                ._categoryViewModel.data[index].thumbnailFull,
-                            title: widget._categoryViewModel.data[index].title,
-                            date: widget._categoryViewModel.data[index].date,
-                            categoryName:
-                                widget._categoryViewModel.data[index].catName,
-                            content:
-                                widget._categoryViewModel.data[index].icerik,
-                          ),
+                        child: Column(
+                          children: [
+                            AnimatedListItem(
+                              index,
+                              key: ValueKey<int>(index),
+                              widget: CategoryFirstItemWidget(
+                                image: widget._categoryViewModel.data[index]
+                                    .thumbnailFull,
+                                title:
+                                    widget._categoryViewModel.data[index].title,
+                                date:
+                                    widget._categoryViewModel.data[index].date,
+                                categoryName: widget
+                                    ._categoryViewModel.data[index].catName,
+                                content: widget
+                                    ._categoryViewModel.data[index].icerik,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 4, right: 4, top: 10, bottom: 10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width,
+                                child: AdmobBanner(
+                                  adUnitId: ams.getBannerAdId(),
+                                  adSize: AdmobBannerSize.LARGE_BANNER,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     } else {
@@ -158,18 +182,48 @@ class _CategoryViewState extends BaseState<CategoryView> {
                             ),
                           ),
                         ),
-                        child: AnimatedListItem(
-                          index,
-                          key: ValueKey<int>(index),
-                          widget: ListArticleWidget(
-                            title: widget._categoryViewModel.data[index].title,
-                            image: widget
-                                ._categoryViewModel.data[index].thumbnailFull,
-                            time: widget._categoryViewModel.data[index].date,
-                            editor: widget
-                                ._categoryViewModel.data[index].authorName,
-                            darkMode: widget.themeController.isDark,
-                          ),
+                        child: Column(
+                          children: [
+                            AnimatedListItem(
+                              index,
+                              key: ValueKey<int>(index),
+                              widget: ListArticleWidget(
+                                title:
+                                    widget._categoryViewModel.data[index].title,
+                                image: widget._categoryViewModel.data[index]
+                                    .thumbnailFull,
+                                time:
+                                    widget._categoryViewModel.data[index].date,
+                                editor: widget
+                                    ._categoryViewModel.data[index].authorName,
+                                darkMode: widget.themeController.isDark,
+                              ),
+                            ),
+                            index % 5 == 0
+                                ? Column(
+                                    children: [
+                                      Divider(),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 4,
+                                            right: 4,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: AdmobBanner(
+                                            adUnitId: ams.getBannerAdId(),
+                                            adSize:
+                                                AdmobBannerSize.LARGE_BANNER,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox()
+                          ],
                         ),
                       );
                     }

@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/view/category_view.dart';
@@ -6,13 +7,13 @@ import 'package:curlyapp/core/features/error/view/error_404_view.dart';
 import 'package:curlyapp/core/features/error/view/error_connection_view.dart';
 import 'package:curlyapp/core/features/home/view-model/home_view_model.dart';
 import 'package:curlyapp/core/features/single-post/view/single_post_view.dart';
+import 'package:curlyapp/core/services/admob_service.dart';
 import 'package:curlyapp/core/widgets/animated_list_item.dart';
 import 'package:curlyapp/core/widgets/bottom_story_article_widget.dart';
 import 'package:curlyapp/core/widgets/home_manset_widget.dart';
 import 'package:curlyapp/core/widgets/last_article_story_widget.dart';
 import 'package:curlyapp/core/widgets/list_article_widget.dart';
 import 'package:curlyapp/core/widgets/loading/home_loading_widget.dart';
-import 'package:curlyapp/core/widgets/see_all_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -30,6 +31,16 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final ams = AdMobService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    Admob.initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -245,6 +256,7 @@ class _HomeViewState extends State<HomeView> {
                                       ],
                                     ),
                                   ),
+
                                   SizedBox(
                                     height: widget.viewModel.hikayeData.length *
                                         125,
@@ -293,7 +305,22 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                   // manşet alt bitiş
                                   // hikaye
-
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 4.0,
+                                        right: 4,
+                                        top: 10,
+                                        bottom: 10),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: MediaQuery.of(context).size.width -
+                                          30,
+                                      child: AdmobBanner(
+                                        adUnitId: ams.getBannerAdId(),
+                                        adSize: AdmobBannerSize.LARGE_BANNER,
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 15.0, left: 10, right: 10),
