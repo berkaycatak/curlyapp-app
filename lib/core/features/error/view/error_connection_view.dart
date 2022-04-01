@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class ErrorConnectionView extends StatelessWidget {
@@ -8,7 +9,7 @@ class ErrorConnectionView extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/images/18_RouterOffline.png",
+            ROUTER_OFFLINE_PATH,
             fit: BoxFit.cover,
           ),
           Positioned(

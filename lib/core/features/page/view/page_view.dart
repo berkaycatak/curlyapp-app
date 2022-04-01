@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/base/theme_controller.dart';
 import 'package:curlyapp/core/constants/constants.dart';
 import 'package:curlyapp/core/features/category/view-model/category_view_model.dart';
 import 'package:curlyapp/core/features/drawer/model/Pages.dart';
@@ -9,42 +10,67 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:url_launcher/url_launcher.dart';
 
-class SinglePageView extends StatelessWidget {
+class SinglePageView extends StatefulWidget {
   final HomeViewModel? home_data;
   final CategoryViewModel? category_data;
+  final ThemeController themeDataController;
   final Pages pages;
   const SinglePageView(
-      {Key? key, this.home_data, this.category_data, required this.pages})
+      {Key? key,
+      this.home_data,
+      this.category_data,
+      required this.pages,
+      required this.themeDataController})
       : super(key: key);
 
+  @override
+  State<SinglePageView> createState() => _SinglePageViewState();
+}
+
+class _SinglePageViewState extends State<SinglePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: widget.themeDataController.isDark
+                ? Theme.of(context).hintColor
+                : Colors.white),
+        actions: [
+          IconButton(
+            icon: Icon(
+              widget.themeDataController.isDark
+                  ? Icons.wb_sunny_outlined
+                  : Icons.sunny,
+            ),
+            onPressed: () {
+              widget.themeDataController.changeTheme();
+            },
+          ),
+        ],
         centerTitle: true,
         title: SizedBox(
           height: 30,
           child: Image.network(
-            home_data?.settings[0].logoUrl ?? TRANSPARENT_IMAGE_URL,
+            widget.home_data?.settings[0].logoUrl ?? TRANSPARENT_IMAGE_URL,
           ),
         ),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[
-                  Color.fromARGB(255, 224, 116, 15),
-                  Color.fromARGB(255, 253, 30, 168),
-                ]),
+              begin: Alignment.bottomLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                widget.themeDataController.isDark
+                    ? Color.fromARGB(255, 66, 34, 5)
+                    : Color.fromARGB(255, 224, 116, 15),
+                widget.themeDataController.isDark
+                    ? Color.fromARGB(255, 105, 11, 69)
+                    : Color.fromARGB(255, 253, 30, 168),
+              ],
+            ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.share),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -53,7 +79,7 @@ class SinglePageView extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +90,7 @@ class SinglePageView extends StatelessWidget {
                     child: MarkdownBody(
                       selectable: true,
                       data: html2md.convert(
-                        pages.title ?? "",
+                        widget.pages.title ?? "",
                       ),
                       styleSheet: MarkdownStyleSheet(
                         p: GoogleFonts.poppins(
@@ -80,7 +106,7 @@ class SinglePageView extends StatelessWidget {
                     child: MarkdownBody(
                       selectable: true,
                       data: html2md.convert(
-                        pages.content ?? "",
+                        widget.pages.content ?? "",
                       ),
                       styleSheet: MarkdownStyleSheet(
                         p: GoogleFonts.poppins(),
@@ -119,10 +145,6 @@ class SinglePageView extends StatelessWidget {
                                             Object error,
                                             StackTrace? stackTrace) =>
                                         const SizedBox(),
-                                    loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) =>
-                                        Image.asset("assets/images/single.gif"),
                                   ),
                                 ),
                               ),

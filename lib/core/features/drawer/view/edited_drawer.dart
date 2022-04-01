@@ -11,8 +11,9 @@ class MyHomePage extends StatefulWidget {
   final HomeViewModel homeViewModel;
   final ThemeController themeController;
 
-
-  const MyHomePage({Key? key, required this.homeViewModel, required this.themeController}) : super(key: key);
+  const MyHomePage(
+      {Key? key, required this.homeViewModel, required this.themeController})
+      : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -139,9 +140,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SinglePageView(
-                                  home_data: widget.homeViewModel,
-                                  pages: widget.homeViewModel.pages[index])),
+                            builder: (context) => SinglePageView(
+                              themeDataController: widget.themeController,
+                              home_data: widget.homeViewModel,
+                              pages: widget.homeViewModel.pages[index],
+                            ),
+                          ),
                         ),
                       );
                     },

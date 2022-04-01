@@ -95,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
           body: RefreshIndicator(
             onRefresh: () => widget.viewModel.getHomepage(1),
             child: (widget.viewModel.isServiceRequestLoading == STATUS_LOADING)
-                ? LoadingWidget()
+                ? LoadingWidget(themeDataController: widget.themeDataController)
                 : (widget.viewModel.isServiceRequestLoading == STATUS_ERROR)
                     ? Error404View()
                     : (widget.viewModel.isServiceRequestLoading ==

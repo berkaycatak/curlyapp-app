@@ -33,7 +33,6 @@ class _SinglePostTemplate2State extends State<SinglePostTemplate2> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
     Admob.initialize();

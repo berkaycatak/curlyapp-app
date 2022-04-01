@@ -87,7 +87,8 @@ class _SplashViewState extends State<SplashView> {
               ),
             );
           } else {
-            return const LoadingWidget();
+            return LoadingWidget(
+                themeDataController: widget.themeDataController);
           }
         },
       ),

@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class ErrorNoResultView extends StatelessWidget {
@@ -11,7 +12,7 @@ class ErrorNoResultView extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/images/14_No_Search_Results.png",
+            NO_SEARCH_RESULTS_PATH,
             fit: BoxFit.cover,
           ),
           Positioned(

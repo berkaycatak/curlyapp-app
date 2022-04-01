@@ -1,3 +1,4 @@
+import 'package:curlyapp/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class Error404View extends StatelessWidget {
@@ -8,7 +9,7 @@ class Error404View extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/images/3_SomethingWentWrong.png",
+            SOMETHING_WENT_WRONG_PATH,
             fit: BoxFit.cover,
           ),
           Positioned(

@@ -69,7 +69,8 @@ class _CategoryViewState extends BaseState<CategoryView> {
         builder: (_) {
           if (widget._categoryViewModel.isServiceRequestLoading ==
               STATUS_LOADING) {
-            return const CategoryLoadingWidget();
+            return CategoryLoadingWidget(
+                themeDataController: widget.themeController);
           } else if (widget._categoryViewModel.isServiceRequestLoading ==
               STATUS_ERROR) {
             return Error404View();

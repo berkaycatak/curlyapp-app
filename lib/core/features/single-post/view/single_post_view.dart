@@ -21,12 +21,6 @@ class SinglePostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SinglePostTemplate4(
-      home_singleData: home_singleData,
-      category_singleData: category_singleData,
-      themeDataController: themeController,
-    );
-
     if (home_singleData?.postStyle == "1" ||
         category_singleData?.postStil == "1") {
       return SinglePostTemplate1(
